@@ -1,0 +1,14 @@
+write_outline:
+  description: >
+    Write a outline about this question/essay {topic}.
+    Ensure the outline is engaging and adheres to the {topic} and have connectivity / explaination.
+  expected_output: >
+    A beautifully crafted outline about {topic}, with exactly 2000 sentences.
+  agent: outline_writer
+write_essay:
+  description: >
+    Write an Essay about provided {essay_outline} outline.
+    Ensure the essay is engaging and adheres to the specified outline.
+  expected_output: >
+    A beautifully crafted essay about provided outline, which exactly states the {essay_outline}.
+  agent: essay_writer
