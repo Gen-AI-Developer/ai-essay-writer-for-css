@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from crewai.flow import Flow, listen, start
 
-from writer.crews.poem_crew.poem_crew import OutlineCrew, EssayCrew
+from writer.crews.poem_crew.poem_crew import OutlineAndEssayCrew
 
 
 class EssayState(BaseModel):
@@ -20,8 +20,8 @@ class PoemFlow(Flow[EssayState]):
         topic = "The impact of technology on society"
         print("Generating Essay Outline")
         result = (
-            OutlineCrew()
-            .crew()
+            OutlineAndEssayCrew()
+            .outline_crew()
             .kickoff(inputs={"topic": topic})
         )
         self.state.essay_outline = result.raw
@@ -31,8 +31,8 @@ class PoemFlow(Flow[EssayState]):
     def generate_essay(self):
         print("Generating essay")
         result = (
-            EssayCrew()
-            .crew()
+            OutlineAndEssayCrew()
+            .essay_crew()
             .kickoff(inputs={"essay_outline": self.state.essay_outline})
         )
 
@@ -49,11 +49,11 @@ class PoemFlow(Flow[EssayState]):
 def kickoff():
     poem_flow = PoemFlow()
     poem_flow.kickoff()
+    
 
-
-# def plot():
-#     poem_flow = PoemFlow()
-#     poem_flow.plot()
+def plot():
+    poem_flow = PoemFlow()
+    poem_flow.plot()
 
 
 if __name__ == "__main__":
