@@ -5,7 +5,6 @@ from crewai.project import CrewBase, agent, crew, task
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
-
 @CrewBase
 class OutlineAndEssayCrew:
     """Poem Crew"""
@@ -35,7 +34,7 @@ class OutlineAndEssayCrew:
 
     @crew
     def outline_crew(self) -> Crew:
-        """Creates the Research ouline on Given Topic"""
+        """Creates the Research outline on Given Topic"""
         # To learn how to add knowledge sources to your crew, check out the documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 
@@ -70,6 +69,33 @@ class OutlineAndEssayCrew:
         return Crew(
             agents=[self.essay_writer()],  # Automatically created by the @agent decorator
             tasks=[self.write_essay()],  # Automatically created by the @task decorator
+            process=Process.sequential,
+            verbose=True,
+        )
+    @agent
+    def essay_identifier(self) -> Agent:
+        return Agent(
+            config=self.agents_config["essay_identifier"],
+        )
+
+    # To learn more about structured task outputs,
+    # task dependencies, and task callbacks, check out the documentation:
+    # https://docs.crewai.com/concepts/tasks#overview-of-a-task
+    @task
+    def identify_essay(self) -> Task:
+        return Task(
+            config=self.tasks_config["identify_essay"],
+        )
+
+    @crew
+    def essay_identifier_crew(self) -> Crew:
+        """Creates the Research ouline on Given Topic"""
+        # To learn how to add knowledge sources to your crew, check out the documentation:
+        # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
+
+        return Crew(
+            agents=[self.essay_identifier()],  # Automatically created by the @agent decorator
+            tasks=[self.identify_essay()],  # Automatically created by the @task decorator
             process=Process.sequential,
             verbose=True,
         )

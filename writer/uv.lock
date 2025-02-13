@@ -3904,10 +3904,14 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "crewai", extra = ["tools"] },
+    { name = "fastapi" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "crewai", extras = ["tools"], specifier = ">=0.100.1,<1.0.0" }]
+requires-dist = [
+    { name = "crewai", extras = ["tools"], specifier = ">=0.100.1,<1.0.0" },
+    { name = "fastapi", specifier = ">=0.115.8" },
+]
 
 [[package]]
 name = "yarl"

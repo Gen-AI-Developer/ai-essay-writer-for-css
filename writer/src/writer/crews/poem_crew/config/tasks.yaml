@@ -1,7 +1,7 @@
 write_outline:
   description: >
-    Write a outline about this question/essay {topic}.
-    Ensure the outline is engaging and adheres to the {topic} and have connectivity / explaination.
+    Write a structured Step by Step outline about this essay {topic} in {type} style.
+    Ensure the outline is engaging and adheres to the {topic} in {type} style and have connectivity / explaination.
   expected_output: >
     A beautifully crafted outline about {topic}, with exactly 2000 sentences.
   agent: outline_writer
@@ -12,3 +12,13 @@ write_essay:
   expected_output: >
     A beautifully crafted essay about provided outline, which exactly states the {essay_outline}.
   agent: essay_writer
+
+identify_essay:
+    description: >
+      Analyze the provided CSS exam essay title to determine the appropriate essay type. Focus on:
+      - Identifying directive words (e.g., "argue" suggests an argumentative essay; "explain" or "describe" indicates expository or descriptive essays; "narrate" or "recount" points to a narrative essay).
+      - Examining the structural hints (e.g., presence of a thesis statement, logical flow, sensory details).
+      Provide the classification (Argumentative, Expository, Narrative, or Descriptive) along with a concise justification based on the detected indicators.
+    expected_output: >
+      A clear output stating the essay type (for example, "Argumentative") and a brief explanation highlighting the key words and structural clues that led to this determination.
+    agent: essay_identifier

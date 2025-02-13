@@ -10,18 +10,31 @@ class EssayState(BaseModel):
     topic: str = ""
     essay_outline: str = ""
     essay: str = ""
+    type: str = ""
 
 
 class PoemFlow(Flow[EssayState]):
 
     @start()
-    def generate_essay_ouline(self):
+    def identify_essay_type(self):
         self.state.topic = input('Enter Question or Topic for the Essay:> ')
+        print("Identifying Essay Type")
+        result = (
+            OutlineAndEssayCrew()
+            .essay_identifier_crew()
+            .kickoff(inputs={"topic": self.state.topic})
+        )
+        print("Essay Type Identified", result.raw)
+        self.state.type = result.raw
+        return {"type": result.raw}
+    
+    @listen(identify_essay_type)
+    def generate_essay_ouline(self):
         print("Generating Essay Outline")
         result = (
             OutlineAndEssayCrew()
             .outline_crew()
-            .kickoff(inputs={"topic": self.state.topic})
+            .kickoff(inputs={"topic": self.state.topic, "type": self.state.type})
         )
         self.state.essay_outline = result.raw
 
@@ -39,9 +52,9 @@ class PoemFlow(Flow[EssayState]):
         print("Essay generated", result.raw)
         self.state.essay = result.raw
 
-    @listen(and_(generate_essay_ouline,generate_essay))
+    @listen(and_(identify_essay_type,generate_essay_ouline,generate_essay))
     def save_essay(self):
-        print("Saving essay")
+        print("Saving Essay")
         with open(f"{self.state.topic} - Outline.md", "w") as f:
             f.write(self.state.essay_outline)
         with open(f"{self.state.topic}.md", "w") as f:
